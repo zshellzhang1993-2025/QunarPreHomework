@@ -20,18 +20,19 @@ public class MainProc {
     /**
      * 程序的入口
      *
-     * @param files 待统计的文件
+     * @param files 待统计的文件或目录(若输入为目录路径则递归统计目录下所有java源文件)
      */
     public static void main(String[] files) {
         ApplicationContext applicationContext =
-                new ClassPathXmlApplicationContext("./resources/applicationContext.xml");
+                new ClassPathXmlApplicationContext("./applicationContext.xml");
         CountLines countLines = (CountLines) applicationContext.getBean("countlines");
+        //执行任务的线程池
         ExecutorService service = Executors.newCachedThreadPool();
 
         try {
             for (String path : files) {
                 service.submit(() -> {
-                    return countLines.countLines(getContent(path));
+                    return countLines.countValidLines(getContent(path));
                 }).get();
             }
         } catch (Exception e) {

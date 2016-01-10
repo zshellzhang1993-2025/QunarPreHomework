@@ -12,6 +12,6 @@ public interface CountLines {
      * @param content 给定的文本内容
      * @return 该文本的有效行数
      */
-    int countLines(String content);
+    int countValidLines(String content);
 
 }
