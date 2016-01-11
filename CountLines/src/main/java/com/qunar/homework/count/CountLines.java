@@ -9,9 +9,9 @@ public interface CountLines {
     /**
      * 计算给定文本内容的有效行数
      *
-     * @param content 给定的文本内容
+     * @param filePathes 目标源文件的路径
      * @return 该文本的有效行数
      */
-    int countValidLines(String content);
+    int countValidLines(String... filePathes);
 
 }
