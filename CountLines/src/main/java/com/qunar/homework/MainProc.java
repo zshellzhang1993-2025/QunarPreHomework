@@ -1,13 +1,8 @@
 package com.qunar.homework;
 
-import com.qunar.homework.count.ConcurrentCountLines;
+import com.qunar.homework.count.CountLines;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 
 /**
  * Created by zhangzhi on 16-1-4.
@@ -23,8 +18,7 @@ public class MainProc {
     public static void main(String... filePathes) {
         ApplicationContext applicationContext =
                 new ClassPathXmlApplicationContext("./applicationContext.xml");
-        ConcurrentCountLines countLines =
-                (ConcurrentCountLines) applicationContext.getBean("countlines");
+        CountLines countLines = (CountLines) applicationContext.getBean("countlines");
 
 
     }

@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 
@@ -21,13 +22,23 @@ public class JavaCountLines implements CountLines {
     //执行并发任务的线程池
     protected ExecutorService executePool;
 
-    @Override
-    public int countValidLines(String... filePath) {
-        return 0;
+    //存放执行的结果(映射集:源文件路径->有效行数)
+    protected Map<String, Integer> report;
+
+
+    public JavaCountLines(BlockingQueue<String> taskQueue, ExecutorService executePool) {
+
     }
 
+    @Override
+    public Map<String, Integer> countValidLines(String... filePath) {
+        return report;
+    }
 
-    public void addTask(String filePath) {
+    /**
+     * @param filePath 源文件路径
+     */
+    protected void addTask(String filePath) {
 
     }
 
