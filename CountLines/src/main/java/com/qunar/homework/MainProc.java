@@ -4,6 +4,8 @@ import com.qunar.homework.count.CountLines;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.Map;
+
 /**
  * Created by zhangzhi on 16-1-4.
  * 程序入口
@@ -16,11 +18,25 @@ public class MainProc {
      * @param filePathes 待统计的文件或目录(若输入为目录路径则统计目录下所有java源文件)
      */
     public static void main(String... filePathes) {
-        ApplicationContext applicationContext =
+
+        /*ApplicationContext applicationContext =
                 new ClassPathXmlApplicationContext("./applicationContext.xml");
+
         CountLines countLines = (CountLines) applicationContext.getBean("countlines");
 
+        Map<String, Integer> result = countLines.countValidLines(filePathes);
+        System.out.println(result);*/
 
+        System.out.println("我休息了！");
+        try {
+            Thread.currentThread().interrupt();
+            Thread.sleep(1000);
+            System.out.println("after！");
+        } catch (InterruptedException e) {
+            System.out.println("catch！");
+            return;
+        }
+        System.out.println("一秒后在叫我吧！");
     }
 
 }

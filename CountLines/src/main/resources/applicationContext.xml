@@ -4,15 +4,6 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean name="taskQueue" class="java.util.concurrent.LinkedBlockingQueue"/>
-
-    <bean name="executePool" class="java.util.concurrent.ThreadPoolExecutor">
-        <constructor-arg index="0" value="0"/>
-    </bean>
-
-    <bean id="countLines" class="com.qunar.homework.count.impl.JavaCountLines">
-        <constructor-arg index="0" ref="taskQueue"/>
-        <constructor-arg index="1" ref="executePool"/>
-    </bean>
+    <bean id="countLines" class="com.qunar.homework.count.impl.AbstractCountLines"/>
 
 </beans>
