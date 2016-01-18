@@ -7,6 +7,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Queue;
@@ -15,7 +17,7 @@ import java.util.concurrent.*;
 
 /**
  * Created by zhangzhi on 16-1-5.
- * 计算java源文件有效行数的实现类
+ * 不针对具体语言的计算源文件有效行数的抽象类
  */
 public abstract class AbstractCountLines implements CountLines {
 
@@ -26,7 +28,17 @@ public abstract class AbstractCountLines implements CountLines {
     protected Queue<String> taskQueue;
 
     /**
-     * 抽象类构造器
+     * 抽象类默认构造器
+     * 默认使用并发队列
+     * 默认能开辟的最佳线程数是4
+     */
+    public AbstractCountLines() {
+        this.taskQueue = new ConcurrentLinkedQueue<>();
+        this.threadCount = 4;
+    }
+
+    /**
+     * 抽象类自定义构造器
      *
      * @param taskQueue   缓存并发任务的队列
      * @param threadCount 依据主机配置决定的线程数量
@@ -44,11 +56,21 @@ public abstract class AbstractCountLines implements CountLines {
 
     @Override
     public int countValidLinesForSingleFile(String filePath) {
-        File file = new File(filePath);
-        if (file.exists() && file.isFile() && isTargetFile(file.getName())) {
-            return 1;
-        } else
+        if (isSingleTargetFile(filePath))
+            return count(filePath);
+        else
             return -1;
+    }
+
+    /**
+     * 判断给定的文件路径是否构成一个有效的目标源文件
+     *
+     * @param filePath 给定的路径
+     * @return 是否是有效的目标文件
+     */
+    protected boolean isSingleTargetFile(String filePath) {
+        File file = new File(filePath);
+        return file.exists() && file.isFile() && isTargetFile(file.getName());
     }
 
     /**
@@ -57,7 +79,24 @@ public abstract class AbstractCountLines implements CountLines {
      * @param filePathes 源文件(或目录)的路径
      */
     protected void addTask(String... filePathes) {
-
+        for (String filePath : filePathes) {
+            try {
+                Files.walkFileTree(Paths.get(filePath),
+                        new SimpleFileVisitor<Path>() {
+                            //重写访问文件时的操作
+                            @Override
+                            public FileVisitResult visitFile
+                            (Path path, BasicFileAttributes attrs) throws IOException {
+                                if (isTargetFile(path.toFile().getName())) {
+                                    while (taskQueue.offer(path.toFile().getName()))
+                                }
+                                return FileVisitResult.CONTINUE;
+                            }
+                        });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -84,10 +123,10 @@ public abstract class AbstractCountLines implements CountLines {
         for (int i = 0; i < threadCount; i++) {
             countPool.submit(() -> {
                 for (; ; ) {
-                    String path = taskQueue.poll();
-                    if (path == null)
+                    String filePath = taskQueue.poll();
+                    if (filePath == null)
                         break;
-                    count(path, report);
+                    report.put(filePath, count(filePath));
                 }
                 latch.countDown();
             });
@@ -105,19 +144,19 @@ public abstract class AbstractCountLines implements CountLines {
     /**
      * 计算一个源文件的有效行数的具体实现
      *
-     * @param path   源文件的路径
-     * @param report 计算的结果写入的数据结构
+     * @param filePath 源文件的路径
+     * @return 有效的行数
      */
-    protected abstract void count(String path, Map<String, Integer> report);
+    protected abstract int count(String filePath);
 
     /**
      * 根据给定的路径名获取文件内容
      *
-     * @param path 路径名
+     * @param filePath 路径名
      * @return 路径名所在文件的内容(若发生异常返回null)
      */
-    protected String getContent(String path) {
-        try (FileInputStream fis = new FileInputStream(path)) {
+    protected String getContent(String filePath) {
+        try (FileInputStream fis = new FileInputStream(filePath)) {
             StringBuilder sb = new StringBuilder();
             FileChannel fc = fis.getChannel();
             ByteBuffer buffer = ByteBuffer.allocate(1024);
