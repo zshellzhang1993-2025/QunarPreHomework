@@ -19,24 +19,14 @@ public class MainProc {
      */
     public static void main(String... filePathes) {
 
-        /*ApplicationContext applicationContext =
-                new ClassPathXmlApplicationContext("./applicationContext.xml");
+        ApplicationContext applicationContext =
+                new ClassPathXmlApplicationContext("applicationContext.xml");
 
         CountLines countLines = (CountLines) applicationContext.getBean("countlines");
 
-        Map<String, Integer> result = countLines.countValidLines(filePathes);
-        System.out.println(result);*/
+        Map<String, Integer> result = countLines.countValidLinesForMultipleFiles(filePathes);
+        System.out.println(result);
 
-        System.out.println("我休息了！");
-        try {
-            Thread.currentThread().interrupt();
-            Thread.sleep(1000);
-            System.out.println("after！");
-        } catch (InterruptedException e) {
-            System.out.println("catch！");
-            return;
-        }
-        System.out.println("一秒后在叫我吧！");
     }
 
 }

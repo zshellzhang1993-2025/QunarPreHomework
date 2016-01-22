@@ -83,13 +83,12 @@ public abstract class AbstractCountLines implements CountLines {
             try {
                 Files.walkFileTree(Paths.get(filePath),
                         new SimpleFileVisitor<Path>() {
-                            //重写访问文件时的操作
+                            //访问文件时的判断操作
                             @Override
                             public FileVisitResult visitFile
                             (Path path, BasicFileAttributes attrs) throws IOException {
-                                if (isTargetFile(path.toFile().getName())) {
-                                    while (taskQueue.offer(path.toFile().getName()))
-                                }
+                                if (isTargetFile(path.toFile().getName()))
+                                    taskQueue.offer(path.toFile().getName());
                                 return FileVisitResult.CONTINUE;
                             }
                         });
