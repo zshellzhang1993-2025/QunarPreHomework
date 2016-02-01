@@ -43,12 +43,35 @@ public class JavaCountLines extends AbstractCountLines {
         if (content == null)
             return -1;
         while (currentCharacter < content.length()) {
-
+            if (content.charAt(currentCharacter) == '\n') {
+                //如果不是空行
+                if (!isBlankLine(content, currentCharacter++))
+                    linesCount++;
+            } else if (content.charAt(currentCharacter) == '/') {
+                isBlankLine(content, currentCharacter);
+            }
         }
         return linesCount;
     }
 
-    protected void judgeInvalid(int linesCount) {
-
+    /**
+     * 判断一行是否是无效的行(仅由'/n','/t'和' '组成)
+     *
+     * @param content          源代码的内容
+     * @param currentCharacter 当前的字符
+     * @return 是否是一个无效的行
+     */
+    protected boolean isBlankLine(String content, int currentCharacter) {
+        //如果第一个字符是'\n'那这就是一个空行
+        if (currentCharacter == 0)
+            return true;
+        else {
+            while (content.charAt(currentCharacter - 1) != '\n') {
+                if (content.charAt(currentCharacter) != ' ' ||
+                        content.charAt(currentCharacter) != '\t')
+                    return true;
+            }
+            return false;
+        }
     }
 }

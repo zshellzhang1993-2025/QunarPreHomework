@@ -13,8 +13,6 @@ import java.util.Map;
  */
 public class MainProc {
 
-    private static Logger logger = Logger.getLogger(MainProc.class);
-
     /**
      * 程序的入口
      *
@@ -24,19 +22,26 @@ public class MainProc {
 
         ApplicationContext applicationContext =
                 new ClassPathXmlApplicationContext("applicationContext.xml");
-
         CountLines countLines = (CountLines) applicationContext.getBean("countlines");
 
-        if (filePathes.length < 1)
-            logger.info("没有可统计的文件!");
-        else if (filePathes.length == 1)
-            logger.info(filePathes[0] + " : " +
-                    countLines.countValidLinesForSingleFile(filePathes[0]));
-        else {
-            Map<String, Integer> result = countLines.countValidLinesForMultipleFiles(filePathes);
-            for (String file : result.keySet()) {
-                logger.info(file + " : " + result.get(file));
+        Logger logger = Logger.getLogger(MainProc.class);
+
+        //如果没有输入则结束程序
+        if (filePathes.length < 1) {
+            logger.info("没有可统计的源文件!");
+            System.exit(0);
+        } else if (filePathes.length == 1) {
+            int linesCount = countLines.countValidLinesForSingleFile(filePathes[0]);
+            //如果结果不是-1,说明是单个源文件,否则可能是单个目录,继续下面的过程
+            if (linesCount != -1) {
+                logger.info(filePathes[0] + " : " + linesCount);
+                System.exit(0);
             }
+        }
+        //针对多源文件或目录
+        Map<String, Integer> result = countLines.countValidLinesForMultipleFiles(filePathes);
+        for (String file : result.keySet()) {
+            logger.info(file + " : " + result.get(file));
         }
 
     }

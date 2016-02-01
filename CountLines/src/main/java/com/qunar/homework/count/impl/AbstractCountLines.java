@@ -1,8 +1,8 @@
 package com.qunar.homework.count.impl;
 
 import com.qunar.homework.count.CountLines;
+import org.apache.log4j.Logger;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -20,6 +20,9 @@ import java.util.concurrent.*;
  * 不针对具体语言的计算源文件有效行数的抽象类
  */
 public abstract class AbstractCountLines implements CountLines {
+
+    //异常跟踪日志
+    private Logger logger = Logger.getLogger(AbstractCountLines.class);
 
     //依据主机配置决定的线程数量
     protected int threadCount;
@@ -69,8 +72,9 @@ public abstract class AbstractCountLines implements CountLines {
      * @return 是否是有效的目标文件
      */
     protected boolean isSingleTargetFile(String filePath) {
-        File file = new File(filePath);
-        return file.exists() && file.isFile() && isTargetFile(file.getName());
+        return Files.exists(Paths.get(filePath))
+                && Files.isDirectory(Paths.get(filePath))
+                && isTargetFile(filePath);
     }
 
     /**
@@ -81,17 +85,22 @@ public abstract class AbstractCountLines implements CountLines {
     protected void addTask(String... filePathes) {
         for (String filePath : filePathes) {
             try {
-                Files.walkFileTree(Paths.get(filePath),
-                        new SimpleFileVisitor<Path>() {
-                            //访问文件时的判断操作
-                            @Override
-                            public FileVisitResult visitFile
-                            (Path path, BasicFileAttributes attrs) throws IOException {
-                                if (isTargetFile(path.toFile().getName()))
-                                    taskQueue.offer(path.toFile().getName());
-                                return FileVisitResult.CONTINUE;
-                            }
-                        });
+                if (Files.exists(Paths.get(filePath))) {
+                    if (Files.isDirectory(Paths.get(filePath))) {
+                        Files.walkFileTree(Paths.get(filePath),
+                                new SimpleFileVisitor<Path>() {
+                                    //访问文件时的判断操作
+                                    @Override
+                                    public FileVisitResult visitFile
+                                    (Path path, BasicFileAttributes attrs) throws IOException {
+                                        if (isTargetFile(path.toFile().getName()))
+                                            taskQueue.offer(path.toFile().getName());
+                                        return FileVisitResult.CONTINUE;
+                                    }
+                                });
+                    } else if (isTargetFile(filePath))
+                        taskQueue.offer(filePath);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -156,18 +165,19 @@ public abstract class AbstractCountLines implements CountLines {
      */
     protected String getContent(String filePath) {
         try (FileInputStream fis = new FileInputStream(filePath)) {
-            StringBuilder sb = new StringBuilder();
-            FileChannel fc = fis.getChannel();
-            ByteBuffer buffer = ByteBuffer.allocate(1024);
+            StringBuilder content = new StringBuilder();
+            FileChannel fisChannel = fis.getChannel();
+            ByteBuffer buffer = ByteBuffer.allocate(8192);
             while (true) {
                 buffer.clear();
-                if (fc.read(buffer) == -1)
+                if (fisChannel.read(buffer) == -1)
                     break;
                 buffer.flip();
-                sb.append(new String(buffer.array(), "UTF-8"));
+                content.append(new String(buffer.array(), "UTF-8"));
             }
-            return sb.toString();
+            return content.toString();
         } catch (IOException e) {
+            logger.error(filePath + " : " + e.getMessage());
             return null;
         }
     }
