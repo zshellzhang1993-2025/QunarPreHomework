@@ -5,7 +5,7 @@ import com.qunar.homework.count.impl.AbstractCountLines;
 import java.util.Queue;
 
 /**
- * Created by zhangzhi on 16-1-14.
+ * Created by zhangzhi on 16-1-25.
  * 针对java源文件的计算有效行数的实现类
  */
 public class JavaCountLines extends AbstractCountLines {
@@ -34,7 +34,21 @@ public class JavaCountLines extends AbstractCountLines {
 
     @Override
     protected int count(String path) {
+        //记录有效的行数
+        int linesCount = 0;
+        //记录当前扫描的是第几个字符
+        int currentCharacter = 0;
+        //源文件转成的字符串
         String content = getContent(path);
-        return 0;
+        if (content == null)
+            return -1;
+        while (currentCharacter < content.length()) {
+
+        }
+        return linesCount;
+    }
+
+    protected void judgeInvalid(int linesCount) {
+
     }
 }

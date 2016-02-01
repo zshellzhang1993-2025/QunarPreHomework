@@ -3,7 +3,7 @@ package com.qunar.homework.count;
 import java.util.Map;
 
 /**
- * Created by zhangzhi on 16-1-5.
+ * Created by zhangzhi on 16-1-24.
  * 定义计算有效行数的行为规范
  * caution:
  * * countValidLinesForMultipleFiles(String... filePathes)可以计算单个源文件的有效行数

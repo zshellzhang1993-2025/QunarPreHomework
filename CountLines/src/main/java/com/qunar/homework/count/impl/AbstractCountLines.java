@@ -16,7 +16,7 @@ import java.util.TreeMap;
 import java.util.concurrent.*;
 
 /**
- * Created by zhangzhi on 16-1-5.
+ * Created by zhangzhi on 16-1-25.
  * 不针对具体语言的计算源文件有效行数的抽象类
  */
 public abstract class AbstractCountLines implements CountLines {
