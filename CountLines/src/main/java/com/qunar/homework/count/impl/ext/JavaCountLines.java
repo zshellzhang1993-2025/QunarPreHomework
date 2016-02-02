@@ -45,15 +45,16 @@ public class JavaCountLines extends AbstractCountLines {
         while (currentCharacter < content.length()) {
             if (content.charAt(currentCharacter) == '\n') {
                 //如果不是无效行就增加有效行数
-                if (!isBlankLine(content, currentCharacter++))
+                if (!isInvalidLine(content, currentCharacter++))
                     linesCount++;
             } else if (content.charAt(currentCharacter) == '/') {
                 //如果下一个字符是'/'或'*'则进入注释处理
                 if (content.charAt(currentCharacter + 1) == '/' ||
                         content.charAt(currentCharacter + 1) == '*') {
                     //判断注释前是否有有效字符,如果有则增加有效行数
-                    if (!isBlankLine(content, currentCharacter))
+                    if (!isInvalidLine(content, currentCharacter)) {
                         linesCount++;
+                    }
 
                     //处理"//"风格的注释
                     if (content.charAt(currentCharacter + 1) == '/') {
@@ -62,11 +63,11 @@ public class JavaCountLines extends AbstractCountLines {
                     //处理"/**/"风格的注释
                     else if (content.charAt(currentCharacter + 1) == '*') {
                         currentCharacter = processMutipleLineComment(content, currentCharacter);
+                        //判断注释后是否有有效字符,依条件判断是否增加有效行数
+                        if (isValidLine(content, currentCharacter))
+                            linesCount++;
                     }
 
-                    //判断注释后是否有有效字符,如果有则增加有效行数
-                    if (!isBlankLine(content, currentCharacter))
-                        linesCount++;
                 }
                 //如果下一个字符不是'/'或'*'则按有效字符处理
                 else
@@ -83,7 +84,7 @@ public class JavaCountLines extends AbstractCountLines {
      * @param currentCharacter 当前的字符位置
      * @return 是否是一个无效的行
      */
-    protected boolean isBlankLine(String content, int currentCharacter) {
+    protected boolean isInvalidLine(String content, int currentCharacter) {
         //如果第一个字符是'\n'或'/'那这就是一个空行
         if (currentCharacter == 0)
             return true;
@@ -91,13 +92,23 @@ public class JavaCountLines extends AbstractCountLines {
             while (currentCharacter > 0 && content.charAt(currentCharacter - 1) != '\n') {
                 if (content.charAt(currentCharacter) != ' ' ||
                         content.charAt(currentCharacter) != '\t') {
-                    return (content.charAt(currentCharacter) == '/' &&
-                            content.charAt(currentCharacter - 1) == '*');
+                    return false;
                 } else
                     currentCharacter--;
             }
             return true;
         }
+    }
+
+    /**
+     * 当跳出/ * * /风格的注释后判断该行是否有可能仍是有效的行
+     *
+     * @param content          源代码的内容
+     * @param currentCharacter 当前的字符位置
+     * @return 是否有有效字符紧跟在后面
+     */
+    protected boolean isValidLine(String content, int currentCharacter) {
+
     }
 
     /**
@@ -108,7 +119,9 @@ public class JavaCountLines extends AbstractCountLines {
      * @return 注释后的下一个字符位置
      */
     protected int processSingleLineComment(String content, int currentCharacter) {
-
+        while (content.charAt(currentCharacter) != '\n')
+            currentCharacter++;
+        return currentCharacter + 1;
     }
 
     /**
