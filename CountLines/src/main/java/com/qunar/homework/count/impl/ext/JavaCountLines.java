@@ -64,7 +64,8 @@ public class JavaCountLines extends AbstractCountLines {
                     else if (content.charAt(currentCharacter + 1) == '*') {
                         currentCharacter = processMutipleLineComment(content, currentCharacter);
                         //判断注释后是否有有效字符,依条件判断是否增加有效行数
-                        if (isValidLine(content, currentCharacter - 1))
+                        if (currentCharacter < content.length()
+                                && isValidLine(content, currentCharacter - 1))
                             linesCount++;
                     }
 
@@ -147,7 +148,8 @@ public class JavaCountLines extends AbstractCountLines {
      * @return 注释后的下一个字符位置
      */
     protected int processSingleLineComment(String content, int currentCharacter) {
-        while (content.charAt(currentCharacter) != '\n')
+        while (currentCharacter < content.length() &&
+                content.charAt(currentCharacter) != '\n')
             currentCharacter++;
         return currentCharacter + 1;
     }
@@ -160,7 +162,22 @@ public class JavaCountLines extends AbstractCountLines {
      * @return 注释后的下一行的第一个字符位置
      */
     protected int processMutipleLineComment(String content, int currentCharacter) {
-
+        currentCharacter = currentCharacter + 2;
+        while (currentCharacter < content.length()) {
+            while (currentCharacter < content.length() &&
+                    content.charAt(currentCharacter) != '*')
+                currentCharacter++;
+            if (currentCharacter == content.length())
+                return currentCharacter;
+            if (content.charAt(currentCharacter + 1) != '/') {
+                while (currentCharacter < content.length() &&
+                        content.charAt(currentCharacter) != '\n')
+                    currentCharacter++;
+                return currentCharacter + 1;
+            } else
+                currentCharacter++;
+        }
+        return currentCharacter;
     }
 
 }
