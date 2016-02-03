@@ -22,7 +22,10 @@ import java.util.concurrent.*;
 public abstract class AbstractCountLines implements CountLines {
 
     //异常跟踪日志
-    private Logger logger = Logger.getLogger(AbstractCountLines.class);
+    private Logger exceptionLogger = Logger.getLogger("exceptionLogger");
+
+    //实时显示执行情况
+    //private Logger displayLogger = Logger.getLogger("displayLogger");
 
     //依据主机配置决定的线程数量
     protected int threadCount;
@@ -73,7 +76,7 @@ public abstract class AbstractCountLines implements CountLines {
      */
     protected boolean isSingleTargetFile(String filePath) {
         return Files.exists(Paths.get(filePath))
-                && Files.isDirectory(Paths.get(filePath))
+                && !Files.isDirectory(Paths.get(filePath))
                 && isTargetFile(filePath);
     }
 
@@ -102,7 +105,7 @@ public abstract class AbstractCountLines implements CountLines {
                         taskQueue.offer(filePath);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                exceptionLogger.debug("缓存源文件名时遇到错误:", e);
             }
         }
     }
@@ -144,7 +147,7 @@ public abstract class AbstractCountLines implements CountLines {
         try {
             latch.await();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            exceptionLogger.error("产生意外的线程中断:", e);
         }
         return report;
     }
@@ -177,7 +180,7 @@ public abstract class AbstractCountLines implements CountLines {
             }
             return content.toString();
         } catch (IOException e) {
-            logger.error(filePath + " : " + e.getMessage());
+            exceptionLogger.error(filePath, e);
             return null;
         }
     }

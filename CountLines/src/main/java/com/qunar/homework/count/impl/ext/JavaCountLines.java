@@ -79,14 +79,14 @@ public class JavaCountLines extends AbstractCountLines {
     }
 
     /**
-     * 判断一行是否是无效的行(仅由'/n','/t'和' '组成或注释的头尾不含有效字符)
+     * 判断一行是否是无效的行(仅由'/n','/t'和' '组成或//风格的注释的头不含有效字符)
      *
      * @param content          源代码的内容
      * @param currentCharacter 当前的字符位置
      * @return 是否是一个无效的行
      */
     protected boolean isInvalidLine(String content, int currentCharacter) {
-        //如果第一个字符是'\n'或'/'那这就是一个空行
+        //如果第一个字符是'\n'或'/'那这就是一个无效的行
         if (currentCharacter == 0)
             return true;
         else {
@@ -109,7 +109,7 @@ public class JavaCountLines extends AbstractCountLines {
      * @return 是否有有效字符紧跟在后面
      */
     protected boolean isValidLine(String content, int currentCharacter) {
-        //是否注释后是否紧跟有效字符
+        //注释后是否紧跟有效字符
         boolean hasSubfixContent = false;
 
         //判断该行注释后是否紧跟着有效字符
