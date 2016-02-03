@@ -1,7 +1,9 @@
 package com.qunar.homework;
 
 import com.qunar.homework.count.CountLines;
-import org.apache.log4j.Logger;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -26,7 +28,7 @@ public class MainProc {
         CountLines countLines = (CountLines) applicationContext.getBean("countlines");
 
         //记录结果的日志
-        Logger reportLogger = Logger.getLogger(MainProc.class);
+        Logger reportLogger = LogManager.getLogger(MainProc.class);
 
         //如果没有输入则结束程序
         if (filePathes.length < 1) {

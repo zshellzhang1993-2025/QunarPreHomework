@@ -5,7 +5,7 @@ import org.junit.Test;
 
 /**
  * Created by zhangzhi on 16-2-3.
- * 测试计算有效行数的抽象类各方法
+ * 测试计算有效行数抽象类的各方法
  */
 public class TestAbstractCountLines {
 
@@ -15,6 +15,18 @@ public class TestAbstractCountLines {
         String content = countLines.getContent
                 ("./src/main/java/com/qunar/homework/MainProc.java");
         System.out.println(content);
+    }
+
+    @Test
+    public void testAddTask() {
+        AbstractCountLines countLines = new JavaCountLines();
+        String[] filePathes = new String[3];
+        filePathes[0] = "/home/zhangzhi/Documents/src/cn/edu/njnu/tidypage";
+        //filePathes[1] = "/home/zhangzhi/Documents/src/cn/edu/njnu/infoextract";
+        filePathes[1] = "/home/zhangzhi/Documents/src/cn/edu/njnu/ExtractModule.java";
+        filePathes[2] = "/home/zhangzhi/Documents/src/cn/edu/njnu/domain";
+        countLines.addTask(filePathes);
+        System.out.println(countLines.taskQueue);
     }
 
 }

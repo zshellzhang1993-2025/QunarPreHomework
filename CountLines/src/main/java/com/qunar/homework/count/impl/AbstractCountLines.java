@@ -1,7 +1,8 @@
 package com.qunar.homework.count.impl;
 
 import com.qunar.homework.count.CountLines;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -22,10 +23,9 @@ import java.util.concurrent.*;
 public abstract class AbstractCountLines implements CountLines {
 
     //异常跟踪日志
-    private Logger exceptionLogger = Logger.getLogger("exceptionLogger");
-
+    private Logger exceptionLogger = LogManager.getLogger("exceptionLogger");
     //实时显示执行情况
-    private Logger contentLogger = Logger.getLogger("contentLogger");
+    private Logger contentLogger = LogManager.getLogger("contentLogger");
 
     //依据主机配置决定的线程数量
     protected int threadCount;
@@ -97,7 +97,7 @@ public abstract class AbstractCountLines implements CountLines {
                                     public FileVisitResult visitFile
                                     (Path path, BasicFileAttributes attrs) throws IOException {
                                         if (isTargetFile(path.toFile().getName()))
-                                            taskQueue.offer(path.toFile().getName());
+                                            taskQueue.offer(path.toString());
                                         return FileVisitResult.CONTINUE;
                                     }
                                 });
