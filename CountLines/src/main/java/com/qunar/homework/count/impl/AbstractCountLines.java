@@ -25,7 +25,7 @@ public abstract class AbstractCountLines implements CountLines {
     private Logger exceptionLogger = Logger.getLogger("exceptionLogger");
 
     //实时显示执行情况
-    //private Logger displayLogger = Logger.getLogger("displayLogger");
+    private Logger contentLogger = Logger.getLogger("contentLogger");
 
     //依据主机配置决定的线程数量
     protected int threadCount;
@@ -105,7 +105,7 @@ public abstract class AbstractCountLines implements CountLines {
                         taskQueue.offer(filePath);
                 }
             } catch (IOException e) {
-                exceptionLogger.debug("缓存源文件名时遇到错误:", e);
+                exceptionLogger.debug("源文件名入队时遇到错误:", e);
             }
         }
     }
@@ -137,7 +137,9 @@ public abstract class AbstractCountLines implements CountLines {
                     String filePath = taskQueue.poll();
                     if (filePath == null)
                         break;
-                    report.put(filePath, count(filePath));
+                    int countLines = count(filePath);
+                    report.put(filePath, countLines);
+                    contentLogger.info(filePath + " : " + countLines);
                 }
                 latch.countDown();
             });

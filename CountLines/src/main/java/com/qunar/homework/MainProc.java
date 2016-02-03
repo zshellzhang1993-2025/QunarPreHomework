@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.util.Map;
+//import java.util.Map;
 
 /**
  * Created by zhangzhi on 16-1-24.
@@ -20,30 +20,33 @@ public class MainProc {
      */
     public static void main(String... filePathes) {
 
+        //注入实例
         ApplicationContext applicationContext =
                 new ClassPathXmlApplicationContext("applicationContext.xml");
         CountLines countLines = (CountLines) applicationContext.getBean("countlines");
 
-        Logger logger = Logger.getLogger(MainProc.class);
+        //记录结果的日志
+        Logger reportLogger = Logger.getLogger(MainProc.class);
 
         //如果没有输入则结束程序
         if (filePathes.length < 1) {
-            logger.info("没有可统计的源文件!");
+            reportLogger.info("没有输入!");
             System.exit(0);
         } else if (filePathes.length == 1) {
             int linesCount = countLines.countValidLinesForSingleFile(filePathes[0]);
             //如果结果不是-1,说明是单个源文件,否则可能是单个目录,继续下面的过程
             if (linesCount != -1) {
-                logger.info(filePathes[0] + " : " + linesCount);
+                reportLogger.info(filePathes[0] + " : " + linesCount);
                 System.exit(0);
             }
         }
         //针对多源文件或目录
-        Map<String, Integer> result = countLines.countValidLinesForMultipleFiles(filePathes);
-        for (String file : result.keySet()) {
-            logger.info(file + " : " + result.get(file));
-        }
-
+        StringBuilder content = new StringBuilder();
+        for (String directory : filePathes)
+            content.append(directory);
+        reportLogger.info(content);
+        /*Map<String, Integer> result =*/   //方法返回的map可以作为其他模块的输入
+        countLines.countValidLinesForMultipleFiles(filePathes);
     }
 
 }
