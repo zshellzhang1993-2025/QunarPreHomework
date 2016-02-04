@@ -91,8 +91,7 @@ public class JavaCountLines extends AbstractCountLines {
             return true;
         else {
             while (currentCharacter > 0 && content.charAt(currentCharacter - 1) != '\n') {
-                if (content.charAt(currentCharacter) != ' ' ||
-                        content.charAt(currentCharacter) != '\t')
+                if (content.charAt(currentCharacter - 1) != ' ')
                     return false;
                 else
                     currentCharacter--;
@@ -115,8 +114,7 @@ public class JavaCountLines extends AbstractCountLines {
         //判断该行注释后是否紧跟着有效字符
         while (content.charAt(currentCharacter) != '/' ||
                 content.charAt(currentCharacter - 1) != '*') {
-            if (content.charAt(currentCharacter) != ' ' ||
-                    content.charAt(currentCharacter) != '\t') {
+            if (content.charAt(currentCharacter) != ' ') {
                 hasSubfixContent = true;
                 break;
             } else
@@ -128,10 +126,9 @@ public class JavaCountLines extends AbstractCountLines {
                     content.charAt(currentCharacter - 1) == '/') {
                 currentCharacter = currentCharacter - 2;
                 while ((content.charAt(currentCharacter)) != '\n') {
-                    if (content.charAt(currentCharacter) != ' ' ||
-                            content.charAt(currentCharacter) != '\t') {
+                    if (content.charAt(currentCharacter) != ' ')
                         return false;
-                    } else
+                    else
                         currentCharacter--;
                 }
             } else
