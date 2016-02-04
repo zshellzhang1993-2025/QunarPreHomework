@@ -7,7 +7,7 @@ import org.junit.Test;
  * Created by zhangzhi on 16-2-3.
  * 测试计算有效行数抽象类的各方法
  */
-public class TestAbstractCountLines {
+public class AbstractCountLinesTest {
 
     @Test
     public void testGetContent() {
