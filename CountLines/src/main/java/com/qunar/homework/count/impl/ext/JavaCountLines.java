@@ -58,7 +58,7 @@ public class JavaCountLines extends AbstractCountLines {
                     if (content.charAt(currentCharacter + 1) == '/') {
                         currentCharacter = processSingleLineComment(content, currentCharacter);
                         //检测该行初有无有效字符
-                        if (isValidLine(content, currentCharacter - 1, true))
+                        if (isValidLine(content, currentCharacter - 2, true))
                             linesCount++;
                     }
 
@@ -70,7 +70,7 @@ public class JavaCountLines extends AbstractCountLines {
                                     content.charAt(currentCharacter) != '*') {
                                 //遇到换行符就扫描该行是否有效
                                 if (content.charAt(currentCharacter) == '\n' &&
-                                        isValidLine(content, currentCharacter, true))
+                                        isValidLine(content, currentCharacter - 1, true))
                                     linesCount++;
                                 currentCharacter++;
                             }
@@ -117,7 +117,12 @@ public class JavaCountLines extends AbstractCountLines {
                         //如果在注释外面有有效字符则判断该行为有效行
                         while (currentCharacter >= 0 &&
                                 content.charAt(currentCharacter) != '\n') {
-                            if (content.charAt(currentCharacter) != ' ')
+                            //如果从一个注释出来又进了另一个注释
+                            if (currentCharacter > 1 &&
+                                    content.charAt(currentCharacter) == '/' &&
+                                    content.charAt(currentCharacter - 1) == '*')
+                                return isValidLine(content, currentCharacter - 2, true);
+                            else if (content.charAt(currentCharacter) != ' ')
                                 return true;
                             else
                                 currentCharacter--;

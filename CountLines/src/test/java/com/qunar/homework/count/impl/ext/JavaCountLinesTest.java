@@ -18,6 +18,13 @@ public class JavaCountLinesTest {
 
     @Test
     public void testProcessSingleLineComment() {
+        JavaCountLines countLines = new JavaCountLines();
+        String content = "//test single line comment\n";
+        Assert.assertEquals(27, countLines.processSingleLineComment(content, 0));
+    }
+
+    @Test
+    public void testCount() {
 
     }
 
