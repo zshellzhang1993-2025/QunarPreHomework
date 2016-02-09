@@ -19,8 +19,11 @@ public class JavaCountLinesTest {
     @Test
     public void testIsValidLine() {
         JavaCountLines countLines = new JavaCountLines();
-        String content = "* test */   int i = 0;";
-        Assert.assertEquals(false, countLines.isValidLine(content, 21));
+        String content = "/* test */   int i = 15 / 3;";
+        Assert.assertEquals(true, countLines.isValidLine(content, 21));
     }
+
+    @Test
+    public void test
 
 }
