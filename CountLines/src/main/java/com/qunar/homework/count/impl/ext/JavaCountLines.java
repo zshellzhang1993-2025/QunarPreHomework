@@ -45,8 +45,10 @@ public class JavaCountLines extends AbstractCountLines {
         while (currentCharacter < content.length()) {
             if (content.charAt(currentCharacter) == '\n') {
                 //如果不是无效行就增加有效行数
-                if (!isInvalidLine(content, currentCharacter++))
+                if (!isValidLine(content, currentCharacter - 1, false)) {
+                    currentCharacter++;
                     linesCount++;
+                }
             } else if (content.charAt(currentCharacter) == '/') {
                 //如果下一个字符是'/'或'*'则进入注释处理
                 if (content.charAt(currentCharacter + 1) == '/' ||
@@ -56,11 +58,31 @@ public class JavaCountLines extends AbstractCountLines {
                     if (content.charAt(currentCharacter + 1) == '/') {
                         currentCharacter = processSingleLineComment(content, currentCharacter);
                         //检测该行初有无有效字符
-                        scanValidLine(content, currentCharacter, false);
+                        if (isValidLine(content, currentCharacter - 1, true))
+                            linesCount++;
                     }
+
                     //处理"/**/"风格的注释
                     else if (content.charAt(currentCharacter + 1) == '*') {
-
+                        currentCharacter = currentCharacter + 2;
+                        while (currentCharacter < content.length()) {
+                            while (currentCharacter < content.length() &&
+                                    content.charAt(currentCharacter) != '*') {
+                                //遇到换行符就扫描该行是否有效
+                                if (content.charAt(currentCharacter) == '\n' &&
+                                        isValidLine(content, currentCharacter, true))
+                                    linesCount++;
+                                currentCharacter++;
+                            }
+                            if (currentCharacter == content.length())
+                                return currentCharacter;
+                            //如果已经匹配上/**/
+                            if (content.charAt(currentCharacter + 1) == '/') {
+                                currentCharacter = currentCharacter + 2;
+                                break;
+                            } else
+                                currentCharacter++;
+                        }
                     }
 
                 }
@@ -73,64 +95,50 @@ public class JavaCountLines extends AbstractCountLines {
     }
 
     /**
-     * 判断一行是否是无效的行(仅由'/n','/t'和' '组成或//风格的注释的头不含有效字符)
+     * 判断一行是否是有效的行
      *
      * @param content          源代码的内容
      * @param currentCharacter 当前的字符位置
-     * @return 是否是一个无效的行
+     * @param inComment        当前字符是否在注释里面
+     * @return 是否是一个有效的行
      */
-    protected boolean isInvalidLine(String content, int currentCharacter) {
-        //如果第一个字符是'\n'或'/'那这就是一个无效的行
+    protected boolean isValidLine(String content, int currentCharacter, boolean inComment) {
+        //如果第一个字符是'\n'那这就是一个无效的行
         if (currentCharacter == 0)
-            return true;
+            return false;
         else {
-            while (currentCharacter > 0 && content.charAt(currentCharacter - 1) != '\n') {
-                if (content.charAt(currentCharacter - 1) != ' ')
-                    return false;
-                else
-                    currentCharacter--;
-            }
-            return true;
-        }
-    }
-
-    /**
-     * 当跳出/ * * /风格的注释后判断该行是否有可能仍是有效的行
-     *
-     * @param content          源代码的内容
-     * @param currentCharacter 当前的字符位置
-     * @return 是否有有效字符紧跟在后面
-     */
-    protected boolean scanValidLine(String content, int currentCharacter, boolean inComment) {
-        //注释后是否紧跟有效字符
-        boolean hasSubfixContent = false;
-
-        //判断该行注释后是否紧跟着有效字符
-        while (currentCharacter > 0 && (content.charAt(currentCharacter) != '/' ||
-                content.charAt(currentCharacter - 1) != '*')) {
-            if (content.charAt(currentCharacter) != ' ') {
-                hasSubfixContent = true;
-                break;
-            } else
-                currentCharacter--;
-        }
-        //判断该行注释前是否含有有效字符,若有则该行已被标记过,不需再重复
-        while (currentCharacter >= 0 &&
-                content.charAt(currentCharacter) != '\n') {
-            if (currentCharacter > 1 && content.charAt(currentCharacter) == '*' &&
-                    content.charAt(currentCharacter - 1) == '/') {
-                currentCharacter = currentCharacter - 2;
-                while (currentCharacter >= 0 &&
-                        (content.charAt(currentCharacter)) != '\n') {
-                    if (content.charAt(currentCharacter) != ' ')
+            if (inComment) {
+                while (currentCharacter > 1 && content.charAt(currentCharacter) != '\n') {
+                    if (content.charAt(currentCharacter) == '*' &&
+                            content.charAt(currentCharacter - 1) == '/' ||
+                            content.charAt(currentCharacter) == '/' &&
+                                    content.charAt(currentCharacter - 1) == '/') {
+                        currentCharacter = currentCharacter - 2;
+                        //如果在注释外面有有效字符则判断该行为有效行
+                        while (currentCharacter >= 0 &&
+                                content.charAt(currentCharacter) != '\n') {
+                            if (content.charAt(currentCharacter) != ' ')
+                                return true;
+                            else
+                                currentCharacter--;
+                        }
                         return false;
-                    else
+                    } else
                         currentCharacter--;
                 }
-            } else
-                currentCharacter--;
+                return false;
+            } else {
+                while (currentCharacter > 1 && content.charAt(currentCharacter) != '\n') {
+                    if (content.charAt(currentCharacter) == '/' &&
+                            content.charAt(currentCharacter - 1) == '*') {
+                        currentCharacter = currentCharacter - 2;
+                        return isValidLine(content, currentCharacter, true);
+                    } else if (content.charAt(currentCharacter) != ' ')
+                        return true;
+                }
+                return false;
+            }
         }
-        return hasSubfixContent;
     }
 
     /**
@@ -145,39 +153,6 @@ public class JavaCountLines extends AbstractCountLines {
                 content.charAt(currentCharacter) != '\n')
             currentCharacter++;
         return currentCharacter + 1;
-    }
-
-
-    protected int processMutipleLineComment(String content, int currentCharacter) {
-        currentCharacter = currentCharacter + 2;
-        while (currentCharacter < content.length()) {
-            //遇到换行符就扫描该行是否有效
-            if (content.charAt(currentCharacter) == '\n' &&
-                    scanValidLine(content, currentCharacter, true))
-                countLines++;
-            while (currentCharacter < content.length() &&
-                    content.charAt(currentCharacter) != '*')
-                currentCharacter++;
-            if (currentCharacter == content.length())
-                return currentCharacter;
-            //如果已经匹配上/**/
-            if (content.charAt(currentCharacter + 1) == '/') {
-                //寻找注释后的下一行的第一个字符位置或下一个注释的位置
-                while (currentCharacter < content.length()) {
-                    if (content.charAt(currentCharacter) == '\n')
-                        return currentCharacter + 1;
-                    else if (content.charAt(currentCharacter) == '/' &&
-                            currentCharacter < content.length() - 1 &&
-                            (content.charAt(currentCharacter + 1) == '*' ||
-                                    content.charAt(currentCharacter + 1) == '/'))
-                        return currentCharacter;
-                    else
-                        currentCharacter++;
-                }
-            } else
-                currentCharacter++;
-        }
-        return currentCharacter;
     }
 
 }

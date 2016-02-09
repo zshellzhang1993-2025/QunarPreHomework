@@ -13,17 +13,12 @@ public class JavaCountLinesTest {
     public void testIsInvalidLine() {
         JavaCountLines countLines = new JavaCountLines();
         String content = "//test\n   int i = 0;  \n//test";
-        Assert.assertEquals(false, countLines.isInvalidLine(content, 22));
+        Assert.assertEquals(false, countLines.isValidLine(content, 22, false));
     }
 
     @Test
-    public void testIsValidLine() {
-        JavaCountLines countLines = new JavaCountLines();
-        String content = "/* test */   int i = 15 / 3;";
-        Assert.assertEquals(true, countLines.isValidLine(content, 21));
-    }
+    public void testProcessSingleLineComment() {
 
-    @Test
-    public void test
+    }
 
 }
