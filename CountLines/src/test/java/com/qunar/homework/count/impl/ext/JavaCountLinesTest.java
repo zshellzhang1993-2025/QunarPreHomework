@@ -25,7 +25,8 @@ public class JavaCountLinesTest {
 
     @Test
     public void testCount() {
-
+        JavaCountLines countLines = new JavaCountLines();
+        System.out.println(countLines.count("/home/zhangzhi/Documents/ExtractModule.java"));
     }
 
 }

@@ -45,10 +45,9 @@ public class JavaCountLines extends AbstractCountLines {
         while (currentCharacter < content.length()) {
             if (content.charAt(currentCharacter) == '\n') {
                 //如果不是无效行就增加有效行数
-                if (!isValidLine(content, currentCharacter - 1, false)) {
-                    currentCharacter++;
+                if (isValidLine(content, currentCharacter, false))
                     linesCount++;
-                }
+                currentCharacter++;
             } else if (content.charAt(currentCharacter) == '/') {
                 //如果下一个字符是'/'或'*'则进入注释处理
                 if (content.charAt(currentCharacter + 1) == '/' ||
@@ -58,7 +57,7 @@ public class JavaCountLines extends AbstractCountLines {
                     if (content.charAt(currentCharacter + 1) == '/') {
                         currentCharacter = processSingleLineComment(content, currentCharacter);
                         //检测该行初有无有效字符
-                        if (isValidLine(content, currentCharacter - 2, true))
+                        if (isValidLine(content, currentCharacter, true))
                             linesCount++;
                     }
 
@@ -70,7 +69,7 @@ public class JavaCountLines extends AbstractCountLines {
                                     content.charAt(currentCharacter) != '*') {
                                 //遇到换行符就扫描该行是否有效
                                 if (content.charAt(currentCharacter) == '\n' &&
-                                        isValidLine(content, currentCharacter - 1, true))
+                                        isValidLine(content, currentCharacter, true))
                                     linesCount++;
                                 currentCharacter++;
                             }
@@ -89,7 +88,8 @@ public class JavaCountLines extends AbstractCountLines {
                 //如果下一个字符不是'/'或'*'则按有效字符处理
                 else
                     currentCharacter++;
-            }
+            } else
+                currentCharacter++;
         }
         return linesCount;
     }
@@ -108,7 +108,7 @@ public class JavaCountLines extends AbstractCountLines {
             return false;
         else {
             if (inComment) {
-                while (currentCharacter > 1 && content.charAt(currentCharacter) != '\n') {
+                while (currentCharacter > 1 && content.charAt(currentCharacter - 1) != '\n') {
                     if (content.charAt(currentCharacter) == '*' &&
                             content.charAt(currentCharacter - 1) == '/' ||
                             content.charAt(currentCharacter) == '/' &&
@@ -133,13 +133,16 @@ public class JavaCountLines extends AbstractCountLines {
                 }
                 return false;
             } else {
-                while (currentCharacter > 1 && content.charAt(currentCharacter) != '\n') {
+                while (currentCharacter > 1 && content.charAt(currentCharacter - 1) != '\n') {
                     if (content.charAt(currentCharacter) == '/' &&
                             content.charAt(currentCharacter - 1) == '*') {
                         currentCharacter = currentCharacter - 2;
-                        return isValidLine(content, currentCharacter, true);
+                        return (content.charAt(currentCharacter) != '\n') &&
+                                isValidLine(content, currentCharacter, true);
                     } else if (content.charAt(currentCharacter) != ' ')
                         return true;
+                    else
+                        currentCharacter--;
                 }
                 return false;
             }
@@ -157,7 +160,7 @@ public class JavaCountLines extends AbstractCountLines {
         while (currentCharacter < content.length() &&
                 content.charAt(currentCharacter) != '\n')
             currentCharacter++;
-        return currentCharacter + 1;
+        return currentCharacter;
     }
 
 }
