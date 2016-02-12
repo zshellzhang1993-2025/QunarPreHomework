@@ -79,6 +79,9 @@ public class JavaCountLines extends AbstractCountLines {
                             //如果已经匹配上/**/
                             if (content.charAt(currentCharacter + 1) == '/') {
                                 currentCharacter = currentCharacter + 2;
+                                if (currentCharacter == content.length() &&
+                                        isValidLine(content, currentCharacter - 3, true))
+                                    linesCount++;
                                 break;
                             } else
                                 currentCharacter++;
@@ -90,8 +93,8 @@ public class JavaCountLines extends AbstractCountLines {
                 else
                     currentCharacter++;
             } else {
+                //如果最后一个字符不是'\n'
                 if (currentCharacter == content.length() - 1 &&
-                        content.charAt(currentCharacter) != '\n' &&
                         isValidLine(content, currentCharacter, false))
                     linesCount++;
                 currentCharacter++;
@@ -173,6 +176,8 @@ public class JavaCountLines extends AbstractCountLines {
         while (currentCharacter < content.length() &&
                 content.charAt(currentCharacter) != '\n')
             currentCharacter++;
+        if (currentCharacter == content.length())
+            currentCharacter--;
         return currentCharacter;
     }
 

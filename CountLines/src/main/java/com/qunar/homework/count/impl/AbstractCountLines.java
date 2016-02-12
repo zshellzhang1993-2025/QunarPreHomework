@@ -180,7 +180,7 @@ public abstract class AbstractCountLines implements CountLines {
                 buffer.flip();
                 content.append(new String(buffer.array(), "UTF-8"));
             }
-            return content.toString();
+            return content.toString().trim();
         } catch (IOException e) {
             exceptionLogger.error(filePath, e);
             return null;
