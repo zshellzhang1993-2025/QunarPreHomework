@@ -168,19 +168,13 @@ public abstract class AbstractCountLines implements CountLines {
      * @param filePath 路径名
      * @return 路径名所在文件的内容(若发生异常返回null)
      */
-    protected String getContent(String filePath) {
+    protected StringBuilder getContent(String filePath) {
         try (FileInputStream fis = new FileInputStream(filePath);
              FileChannel fisChannel = fis.getChannel()) {
-            StringBuilder content = new StringBuilder();
-            ByteBuffer buffer = ByteBuffer.allocate(8192);
-            while (true) {
-                buffer.clear();
-                if (fisChannel.read(buffer) == -1)
-                    break;
-                buffer.flip();
-                content.append(new String(buffer.array(), "UTF-8"));
-            }
-            return content.toString().trim();
+            ByteBuffer buffer = ByteBuffer.allocate((int) fisChannel.size());
+            fisChannel.read(buffer);
+            buffer.flip();
+            return new StringBuilder(new String(buffer.array(), "UTF-8"));
         } catch (IOException e) {
             exceptionLogger.error(filePath, e);
             return null;

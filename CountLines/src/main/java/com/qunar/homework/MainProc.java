@@ -25,7 +25,7 @@ public class MainProc {
         //注入实例
         ApplicationContext applicationContext =
                 new ClassPathXmlApplicationContext("applicationContext.xml");
-        CountLines countLines = (CountLines) applicationContext.getBean("countlines");
+        CountLines countLines = (CountLines) applicationContext.getBean("countLines");
 
         //记录结果的日志
         Logger reportLogger = LogManager.getLogger(MainProc.class);

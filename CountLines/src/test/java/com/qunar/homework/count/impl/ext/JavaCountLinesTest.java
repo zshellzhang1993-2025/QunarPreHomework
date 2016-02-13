@@ -12,21 +12,21 @@ public class JavaCountLinesTest {
     @Test
     public void testIsInvalidLine() {
         JavaCountLines countLines = new JavaCountLines();
-        String content = "//test\n   int i = 0;  \n//test";
+        StringBuilder content = new StringBuilder("//test\n   int i = 0;  \n//test");
         Assert.assertEquals(false, countLines.isValidLine(content, 22, false));
     }
 
     @Test
     public void testProcessSingleLineComment() {
         JavaCountLines countLines = new JavaCountLines();
-        String content = "//test single line comment\n";
+        StringBuilder content = new StringBuilder("//test single line comment\n");
         Assert.assertEquals(27, countLines.processSingleLineComment(content, 0));
     }
 
     @Test
     public void testCount() {
         JavaCountLines countLines = new JavaCountLines();
-        System.out.println(countLines.count("/home/zhangzhi/Documents/ExtractModule.java"));
+        System.out.println(countLines.count("/home/zhangzhi/Documents/ExtractProjects.java"));
     }
 
 }

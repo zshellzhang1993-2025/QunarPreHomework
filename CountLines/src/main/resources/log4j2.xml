@@ -2,26 +2,28 @@
 <configuration status="off">
 
     <properties>
-        <property name="path">./report</property>
+        <property name="path">/home/zhangzhi/Documents/report</property>
+        <property name="detailPattern">%d{yyyy-MM-dd HH:mm:ss} %m%n</property>
+        <property name="shortPattern">%m%n</property>
     </properties>
 
     <appenders>
         <file name="RootFile" fileName="${path}/SourceFilesLines.log">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %m%n"/>
+            <PatternLayout pattern="${detailPattern}"/>
         </file>
 
         <console name="ExceptionConsole" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %m%n"/>
+            <PatternLayout pattern="${detailPattern}"/>
         </console>
         <file name="ExceptionFile" fileName="${path}/Exceptions.log">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %m%n"/>
+            <PatternLayout pattern="${detailPattern}"/>
         </file>
 
         <console name="ContentConsole" target="SYSTEM_OUT">
-            <PatternLayout pattern="%m%n"/>
+            <PatternLayout pattern="${shortPattern}"/>
         </console>
         <file name="ContentFile" fileName="${path}/SourceFilesLines.log">
-            <PatternLayout pattern="%m%n"/>
+            <PatternLayout pattern="${shortPattern}"/>
         </file>
     </appenders>
 
@@ -36,7 +38,7 @@
             <appender-ref ref="ExceptionFile"/>
         </logger>
         <!-- 内容日志用于向显示器输出内容 -->
-        <logger name="contentFile" level="DEBUG" additivity="false">
+        <logger name="contentLogger" level="DEBUG" additivity="false">
             <appender-ref ref="ContentConsole"/>
             <appender-ref ref="ContentFile"/>
         </logger>

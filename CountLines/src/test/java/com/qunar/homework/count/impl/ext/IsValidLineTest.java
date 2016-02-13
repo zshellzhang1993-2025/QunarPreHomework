@@ -19,7 +19,7 @@ public class IsValidLineTest {
     private boolean isValid;
 
     //待判断内容
-    private String content;
+    private StringBuilder content;
 
     //当前字符位置
     int currentCharacter;
@@ -30,7 +30,7 @@ public class IsValidLineTest {
     public IsValidLineTest(boolean isValid, String content,
                            int currentCharacter, boolean inComment) {
         this.isValid = isValid;
-        this.content = content;
+        this.content = new StringBuilder(content);
         this.currentCharacter = currentCharacter;
         this.inComment = inComment;
     }

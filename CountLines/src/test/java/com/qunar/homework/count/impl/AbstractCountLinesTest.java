@@ -12,7 +12,7 @@ public class AbstractCountLinesTest {
     @Test
     public void testGetContent() {
         AbstractCountLines countLines = new JavaCountLines();
-        String content = countLines.getContent
+        StringBuilder content = countLines.getContent
                 ("./src/main/java/com/qunar/homework/MainProc.java");
         System.out.println(content);
     }
