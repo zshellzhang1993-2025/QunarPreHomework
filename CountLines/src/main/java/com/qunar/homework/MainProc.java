@@ -44,8 +44,10 @@ public class MainProc {
         }
         //针对多源文件或目录
         StringBuilder content = new StringBuilder();
-        for (String directory : filePathes)
+        for (String directory : filePathes) {
             content.append(directory);
+            content.append(" ");
+        }
         reportLogger.info(content);
         /*Map<String, Integer> result =*/   //方法返回的map可以作为其他模块的输入
         countLines.countValidLinesForMultipleFiles(filePathes);

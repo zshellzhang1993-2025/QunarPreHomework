@@ -148,6 +148,7 @@ public abstract class AbstractCountLines implements CountLines {
 
         try {
             latch.await();
+            contentLogger.info("\n\n");
         } catch (InterruptedException e) {
             exceptionLogger.error("产生意外的线程中断:", e);
         }
