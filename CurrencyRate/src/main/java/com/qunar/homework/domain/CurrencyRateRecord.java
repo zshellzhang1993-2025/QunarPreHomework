@@ -4,9 +4,9 @@ import org.joda.time.DateTime;
 
 /**
  * Created by zhangzhi on 16-2-16.
- * 领域模型：某日期的当日汇率
+ * 领域模型：某日期下的当日汇率
  */
-public class CurrencyRateInOneDay {
+public class CurrencyRateRecord {
 
     //日期
     private DateTime dateTime;
@@ -20,7 +20,7 @@ public class CurrencyRateInOneDay {
     //对港币汇率
     private String HKD;
 
-    public CurrencyRateInOneDay(DateTime dateTime, String USD, String EUR, String HKD) {
+    public CurrencyRateRecord(DateTime dateTime, String USD, String EUR, String HKD) {
         this.dateTime = dateTime;
         this.USD = USD;
         this.EUR = EUR;
