@@ -9,7 +9,12 @@ import org.jsoup.nodes.Element;
  */
 public abstract class Extractor {
 
-
+    /**
+     * 从获取的网页内容中抽取需要的信息
+     *
+     * @param element 网页内容(表现为一棵DOM树)
+     * @return 抽取出来的数据集合
+     */
     public abstract Extractable extractDataFormContent(Element element);
 
 }

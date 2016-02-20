@@ -16,6 +16,10 @@ public abstract class ContentProvider {
 
     /**
      * 加载配置文件爬取网页并持久化从网页中抽取的内容
+     * 过程如下:
+     * 1.下载从配置文件给出的目标网页
+     * 2.从网页内容中抽取目标数据集
+     * 3.持久化目标数据集
      */
     public abstract void retriveDataFromPages();
 

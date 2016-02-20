@@ -5,9 +5,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="extractor" class="com.qunar.homework.extractor.ext.CurrencyRateExtractor">
-
-    </bean>
+    <bean id="extractor" class="com.qunar.homework.extractor.ext.CurrencyRateExtractor"/>
 
     <bean id="contentProvider" class="com.qunar.homework.contentprovider.ext.CurrencyRateProvider">
         <property name="extractor" ref="extractor"/>
