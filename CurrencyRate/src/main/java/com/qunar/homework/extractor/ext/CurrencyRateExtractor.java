@@ -14,4 +14,5 @@ public class CurrencyRateExtractor extends Extractor {
     public Extractable extractDataFormContent(Element element) {
         return null;
     }
+
 }
