@@ -1,5 +1,6 @@
 package com.qunar.homework.extractor;
 
+import com.qunar.homework.ParameterHelper;
 import com.qunar.homework.domain.Extractable;
 import org.jsoup.nodes.Element;
 
@@ -9,6 +10,9 @@ import org.jsoup.nodes.Element;
  */
 public abstract class Extractor {
 
+    //参数获取工具
+    protected ParameterHelper parameterHelper;
+
     /**
      * 从获取的网页内容中抽取需要的信息
      *
@@ -16,5 +20,13 @@ public abstract class Extractor {
      * @return 抽取出来的数据集合
      */
     public abstract Extractable extractDataFormContent(Element element);
+
+    /**
+     * 从获取的网页内容中抽取下一级的URLs
+     *
+     * @param element 网页内容(表现为一棵DOM树)
+     * @return 抽取出来的URLs
+     */
+    public abstract String[] extractUrlsFromContent(Element element);
 
 }

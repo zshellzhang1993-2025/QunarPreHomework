@@ -16,12 +16,14 @@ import java.io.IOException;
  */
 public abstract class ContentProvider {
 
-    ParameterHelper parameterHelper;
+    //参数获取工具
+    protected ParameterHelper parameterHelper;
 
     public void setParameterHelper(ParameterHelper helper) {
         this.parameterHelper = helper;
     }
 
+    //抽取信息的模块
     protected Extractor extractor;
 
     public void setExtractor(Extractor extractor) {

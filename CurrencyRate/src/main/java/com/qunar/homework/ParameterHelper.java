@@ -32,16 +32,20 @@ public class ParameterHelper {
     /**
      * 根据标签名获得单个参数值
      *
-     * @param name 标签名
+     * @param tags 标签名
      * @return 标签对应的值
      */
-    public String getSingleParameter(String name) {
-        return infoRoot.element(name).getText().replaceAll("\n", "").trim();
+    public String getSingleParameter(String... tags) {
+        for (int i = 0; i < tags.length; i++) {
+
+        }
+        return infoRoot.element(tags).getText().replaceAll("\n", "").trim();
     }
 
     public List<String> getMultiParameters(String name) {
         List<Element> elements = infoRoot.element(name).elements();
         List<String> result = new ArrayList<>();
+
         elements.forEach(element ->
                 result.add(element.getText().replaceAll("\n", "").trim()));
         return result;
