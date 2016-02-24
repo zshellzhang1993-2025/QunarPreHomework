@@ -15,7 +15,7 @@ public class CurrencyRateProvider extends ContentProvider {
         String seedPage = parameterHelper.getSingleParameter("seed");
         String pageContent = downloadPage(seedPage);
         Element element = Jsoup.parse(pageContent).body();
-        String[] contentPage = extractor.extractDataFormContent(element);
+        String[] contentPage = extractor.extractUrlsFromContent(element);
     }
 
 }

@@ -32,14 +32,27 @@ public class ParameterHelper {
     /**
      * 根据标签名获得单个参数值
      *
-     * @param tags 标签名
+     * @param tags 标签名(不定长数组,用前往后为路径所在的标签名)
      * @return 标签对应的值
      */
     public String getSingleParameter(String... tags) {
-        for (int i = 0; i < tags.length; i++) {
-
+        Element target = infoRoot;
+        if (tags.length == 0) {
+            //slf4j
+            return null;
         }
-        return infoRoot.element(tags).getText().replaceAll("\n", "").trim();
+        //如果只有一个标签
+        if (tags.length == 1)
+            return target.element(tags[0]).getText().replaceAll("\n", "").trim();
+        for (int i = 0; i < tags.length - 1; i++) {
+            target = target.element(tags[i]);
+            if (target.isTextOnly()) {
+                //slf4j
+                return null;
+            }
+        }
+        return target.element(tags[tags.length - 1])
+                .getText().replaceAll("\n", "").trim();
     }
 
     public List<String> getMultiParameters(String name) {
