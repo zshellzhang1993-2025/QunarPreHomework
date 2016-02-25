@@ -15,4 +15,8 @@ public class CurrencyRateExtractor extends Extractor {
         return null;
     }
 
+    @Override
+    public String[] extractUrlsFromContent(Element element) {
+        return new String[0];
+    }
 }
