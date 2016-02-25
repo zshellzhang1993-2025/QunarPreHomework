@@ -1,5 +1,7 @@
 package com.qunar.homework;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -17,6 +19,9 @@ public class ParameterHelper {
 
     Element infoRoot;
 
+    //错误日志
+    Logger errorLogger = LogManager.getLogger(ParameterHelper.class);
+
     /**
      * 构造器:初始化配置文件的根节点
      */
@@ -27,7 +32,7 @@ public class ParameterHelper {
                     ParameterHelper.class.getResource("/config.xml").getPath()));
             infoRoot = doc.getRootElement();
         } catch (DocumentException e) {
-            //slf4j
+            errorLogger.error("配置文件加载错误", e);
             System.exit(1);
         }
     }
@@ -60,7 +65,7 @@ public class ParameterHelper {
         }
         //定位到最后一个目标标签后获取其内容
         target = target.element(tags[tags.length - 1]);
-        if (target != null && target.nodeCount() == 0)
+        if (target != null && target.nodeCount() != 0)
             return target.getText().replaceAll("\n", "").trim();
         else
             return null;
@@ -100,7 +105,7 @@ public class ParameterHelper {
         }
         //定位到最后一个目标标签后获取其内容
         target = target.element(tags[tags.length - 1]);
-        if (target != null && target.nodeCount() == 0) {
+        if (target != null && target.nodeCount() != 0) {
             elements = target.elements();
             elements.forEach(element ->
                     result.add(element.getText().replaceAll("\n", "").trim()));
