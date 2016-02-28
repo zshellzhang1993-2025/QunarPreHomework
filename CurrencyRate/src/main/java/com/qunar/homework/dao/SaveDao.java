@@ -14,6 +14,6 @@ public interface SaveDao {
      * @param extractable 待存储的实体
      * @return 是否成功存储
      */
-    boolean save(Extractable<String> extractable);
+    boolean save(Extractable extractable);
 
 }
