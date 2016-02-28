@@ -17,10 +17,10 @@ import java.util.List;
  */
 public class ParameterHelper {
 
-    Element infoRoot;
+    protected Element infoRoot;
 
     //错误日志
-    Logger errorLogger = LogManager.getLogger(ParameterHelper.class);
+    protected Logger errorLogger = LogManager.getLogger(ParameterHelper.class);
 
     /**
      * 构造器:初始化配置文件的根节点
@@ -32,7 +32,7 @@ public class ParameterHelper {
                     ParameterHelper.class.getResource("/config.xml").getPath()));
             infoRoot = doc.getRootElement();
         } catch (DocumentException e) {
-            errorLogger.error("配置文件加载错误", e);
+            //slf4j
             System.exit(1);
         }
     }
