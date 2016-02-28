@@ -7,11 +7,18 @@
 
     <bean id="parameterHelper" class="com.qunar.homework.ParameterHelper"/>
 
-    <bean id="extractor" class="com.qunar.homework.extractor.ext.CurrencyRateExtractor"/>
+    <bean id="extractor" class="com.qunar.homework.extractor.ext.CurrencyRateExtractor">
+        <property name="parameterHelper" ref="parameterHelper"/>
+    </bean>
+
+    <bean id="dao" class="com.qunar.homework.dao.exceldao.ExcelSaveDaoImpl">
+        <property name="excelFilePath" value=""/>
+    </bean>
 
     <bean id="contentProvider" class="com.qunar.homework.contentprovider.ext.CurrencyRateProvider">
         <property name="extractor" ref="extractor"/>
         <property name="parameterHelper" ref="parameterHelper"/>
+        <property name="dao" ref="dao"/>
     </bean>
 
 </beans>

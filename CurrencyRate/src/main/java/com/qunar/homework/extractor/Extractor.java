@@ -13,6 +13,10 @@ public abstract class Extractor {
     //参数获取工具
     protected ParameterHelper parameterHelper;
 
+    public void setParameterHelper(ParameterHelper parameterHelper) {
+        this.parameterHelper = parameterHelper;
+    }
+
     /**
      * 从获取的网页内容中抽取需要的信息
      *

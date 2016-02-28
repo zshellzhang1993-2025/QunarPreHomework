@@ -1,6 +1,7 @@
 package com.qunar.homework.contentprovider;
 
 import com.qunar.homework.ParameterHelper;
+import com.qunar.homework.dao.SaveDao;
 import com.qunar.homework.extractor.Extractor;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -28,6 +29,13 @@ public abstract class ContentProvider {
 
     public void setExtractor(Extractor extractor) {
         this.extractor = extractor;
+    }
+
+    //存储抽取信息的模块
+    protected SaveDao dao;
+
+    public void setDao(SaveDao dao) {
+        this.dao = dao;
     }
 
     /**
