@@ -12,7 +12,6 @@ public class CurrencyRateProvider extends ContentProvider {
 
     @Override
     public void retriveDataFromPages() {
-        String seedPage = parameterHelper.getSingleParameter("seed");
         String pageContent = downloadPage(seedPage);
         Element element = Jsoup.parse(pageContent).body();
         //从种子网页中获得具体的数据目标数据所在的网页

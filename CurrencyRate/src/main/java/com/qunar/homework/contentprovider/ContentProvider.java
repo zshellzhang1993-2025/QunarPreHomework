@@ -1,6 +1,5 @@
 package com.qunar.homework.contentprovider;
 
-import com.qunar.homework.ParameterHelper;
 import com.qunar.homework.dao.SaveDao;
 import com.qunar.homework.extractor.Extractor;
 import org.apache.http.HttpResponse;
@@ -17,11 +16,11 @@ import java.io.IOException;
  */
 public abstract class ContentProvider {
 
-    //参数获取工具
-    protected ParameterHelper parameterHelper;
+    //种子网页
+    protected String seedPage;
 
-    public void setParameterHelper(ParameterHelper helper) {
-        this.parameterHelper = helper;
+    public void setSeedPage(String seedPage) {
+        this.seedPage = seedPage;
     }
 
     //抽取信息的模块

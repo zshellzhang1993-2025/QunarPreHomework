@@ -1,6 +1,5 @@
 package com.qunar.homework.extractor;
 
-import com.qunar.homework.ParameterHelper;
 import com.qunar.homework.domain.Extractable;
 import org.jsoup.nodes.Element;
 
@@ -9,13 +8,6 @@ import org.jsoup.nodes.Element;
  * 定义分析页面抽取内容的抽象类
  */
 public abstract class Extractor {
-
-    //参数获取工具
-    protected ParameterHelper parameterHelper;
-
-    public void setParameterHelper(ParameterHelper parameterHelper) {
-        this.parameterHelper = parameterHelper;
-    }
 
     /**
      * 从获取的网页内容中抽取需要的信息
