@@ -6,3 +6,4 @@
 
 1. [CountLines](https://github.com/ZhangZhi1993-2025/QunarPreHomework/tree/master/CountLines)
 2. [CurrencyRate](https://github.com/ZhangZhi1993-2025/QunarPreHomework/tree/master/CurrencyRate)
+3. [CalculatePackages](https://github.com/ZhangZhi1993-2025/QunarPreHomework/tree/master/CountLines)
