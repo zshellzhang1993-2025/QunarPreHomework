@@ -20,7 +20,7 @@ public class AbstractCountLinesTest {
     @Test
     public void testAddTask() {
         AbstractCountLines countLines = new JavaCountLines();
-        String[] filePathes = new String[3];
+        String[] filePathes = new String[2];
         filePathes[0] = "/home/zhangzhi/Documents/src/cn/edu/njnu/tidypage";
         //filePathes[1] = "/home/zhangzhi/Documents/src/cn/edu/njnu/infoextract";
         filePathes[1] = "/home/zhangzhi/Documents/src/cn/edu/njnu/ExtractModule.java";
