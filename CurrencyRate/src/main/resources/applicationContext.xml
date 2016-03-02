@@ -17,6 +17,8 @@
         <property name="extractor" ref="extractor"/>
         <property name="seedPage" value="seedPage"/>
         <property name="dao" ref="dao"/>
+        <property name="count" value="20"/>
+        <property name="threadCount" value="4"/>
     </bean>
 
 </beans>
