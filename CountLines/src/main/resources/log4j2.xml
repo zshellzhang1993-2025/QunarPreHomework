@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="off">
+
+    <properties>
+        <property name="path">/home/zhangzhi/Documents/report</property>
+        <property name="detailPattern">%d{yyyy-MM-dd HH:mm:ss} %m%n</property>
+        <property name="shortPattern">%m%n</property>
+    </properties>
+
+    <appenders>
+        <file name="RootFile" fileName="${path}/SourceFilesLines.log">
+            <PatternLayout pattern="${detailPattern}"/>
+        </file>
+
+        <console name="ExceptionConsole" target="SYSTEM_OUT">
+            <PatternLayout pattern="${detailPattern}"/>
+        </console>
+        <file name="ExceptionFile" fileName="${path}/Exceptions.log">
+            <PatternLayout pattern="${detailPattern}"/>
+        </file>
+
+        <console name="ContentConsole" target="SYSTEM_OUT">
+            <PatternLayout pattern="${shortPattern}"/>
+        </console>
+        <file name="ContentFile" fileName="${path}/SourceFilesLines.log">
+            <PatternLayout pattern="${shortPattern}"/>
+        </file>
+    </appenders>
+
+    <loggers>
+        <!-- 根日志用于向文件中输出执行结果的时间等信息 -->
+        <root level="DEBUG">
+            <appender-ref ref="RootFile"/>
+        </root>
+        <!-- 异常日志用于向显示器与文件输出异常详情 -->
+        <logger name="exceptionLogger" level="DEBUG" additivity="false">
+            <appender-ref ref="ExceptionConsole"/>
+            <appender-ref ref="ExceptionFile"/>
+        </logger>
+        <!-- 内容日志用于向显示器输出内容 -->
+        <logger name="contentLogger" level="DEBUG" additivity="false">
+            <appender-ref ref="ContentConsole"/>
+            <appender-ref ref="ContentFile"/>
+        </logger>
+    </loggers>
+
+</configuration>
